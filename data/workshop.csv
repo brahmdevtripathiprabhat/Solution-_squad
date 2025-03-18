@@ -1,0 +1,7 @@
+Workshop_ID,Technician,Task,Status,Completion_Date,Cost
+301,Tom Carter,Engine Repair,Completed,2025-03-10,1200
+302,Emma Wilson,Oil Change,Pending,2025-03-11,300
+303,Liam Johnson,Brake Replacement,Completed,2025-03-12,800
+304,Olivia Davis,Tire Replacement,In Progress,2025-03-13,600
+305,Noah Smith,General Maintenance,Completed,2025-03-14,400
+306,Ava Miller,Inspection,Pending,2025-03-15,200

@@ -1,0 +1,7 @@
+Item_ID,Item_Name,Category,Stock_Quantity,Unit_Price,Last_Stock_Update
+401,Brake Pads,Auto Parts,150,25,2025-03-10
+402,Engine Oil,Auto Parts,300,15,2025-03-11
+403,Car Battery,Electronics,50,120,2025-03-12
+404,Headlights,Auto Parts,100,80,2025-03-13
+405,Seat Covers,Accessories,200,45,2025-03-14
+406,Windshield Wipers,Accessories,250,30,2025-03-15

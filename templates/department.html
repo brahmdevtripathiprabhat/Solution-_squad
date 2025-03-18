@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ name.capitalize() }} Department</h2>
+
+{% if data %}
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for col in columns %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No data available for {{ name }} department.</p>
+{% endif %}
+
+---
+
+<!-- ✅ Traffic Prediction Section -->
+{% if name.lower() == "traffic" %}
+    <h3>Traffic Department</h3>
+
+    <!-- Button to toggle image -->
+    <button onclick="toggleForecast()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 10px 0;">
+        Show Traffic Forecast
+    </button>
+
+    <!-- Image hidden by default -->
+    <div id="forecastContainer" style="display: none; margin-top: 20px;">
+        <img src="{{ url_for('static', filename='traffic_forecast.png') }}" alt="Traffic Forecast" 
+             style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+{% endif %}
+
+---
+
+<!-- ✅ Purchases Section -->
+{% if name.lower() == "purchases" %}
+    <h3>Purchases Data Analysis</h3>
+
+    <!-- 🎯 Toggle Buttons -->
+    <div class="btn-group" role="group" aria-label="Purchases Analysis" style="margin-bottom: 20px;">
+        <button onclick="toggleVisibility('suppliers')" class="btn btn-primary">Top Suppliers</button>
+        <button onclick="toggleVisibility('forecast')" class="btn btn-success">Future Forecast</button>
+        <button onclick="toggleVisibility('price')" class="btn btn-warning">Price Optimization</button>
+        <button onclick="toggleVisibility('reliability')" class="btn btn-info">Supplier Reliability</button>
+    </div>
+
+    <!-- 📊 Top Suppliers -->
+    <div id="suppliers" class="image-container" style="display: none; margin-top: 20px;">
+        <h4>Top-Performing Suppliers</h4>
+        <img src="{{ url_for('static', filename='top_suppliers.png') }}" alt="Top Suppliers" class="img-fluid">
+    </div>
+
+    <!-- 📈 Future Purchase Forecast -->
+    <div id="forecast" class="image-container" style="display: none; margin-top: 20px;">
+        <h4>Future Purchase Forecast</h4>
+        <img src="{{ url_for('static', filename='purchase_forecast.png') }}" alt="Demand Forecast" class="img-fluid">
+    </div>
+
+    <!-- 💰 Price Optimization -->
+    <div id="price" class="image-container" style="display: none; margin-top: 20px;">
+        <h4>Price Optimization</h4>
+        <img src="{{ url_for('static', filename='price_optimization.png') }}" alt="Price Optimization" class="img-fluid">
+    </div>
+
+    <!-- 🔍 Supplier Reliability -->
+    <div id="reliability" class="image-container" style="display: none; margin-top: 20px;">
+        <h4>Supplier Reliability</h4>
+        <img src="{{ url_for('static', filename='reliability_chart.png') }}" alt="Supplier Performance" class="img-fluid">
+    </div>
+{% endif %}
+
+---
+
+<!-- 🔥 JavaScript for Toggling -->
+<script>
+    // Function to toggle traffic forecast
+    function toggleForecast() {
+        const container = document.getElementById('forecastContainer');
+        container.style.display = (container.style.display === "none" || container.style.display === "") ? "block" : "none";
+    }
+
+    // Function to toggle Purchases Analysis images
+    function toggleVisibility(id) {
+        const containers = document.querySelectorAll('.image-container');
+
+        // Hide all containers
+        containers.forEach(container => {
+            if (container.id !== id) {
+                container.style.display = "none";
+            }
+        });
+
+        // Toggle the selected container
+        const selectedContainer = document.getElementById(id);
+        selectedContainer.style.display = (selectedContainer.style.display === "none" || selectedContainer.style.display === "") 
+                                            ? "block" 
+                                            : "none";
+    }
+</script>
+
+---
+
+<!-- 🔙 Back to Dashboard -->
+<div class="text-center mt-4">
+    <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+{% endblock %}

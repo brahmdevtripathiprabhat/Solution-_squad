@@ -1,0 +1,7 @@
+Account_ID,Client_Name,Balance,Last_Transaction,Account_Type
+201,Alpha Corp,500000,2025-03-10,Corporate
+202,Beta Inc,300000,2025-03-11,Business
+203,Charlie Ltd,75000,2025-03-12,Savings
+204,Delta LLC,120000,2025-03-13,Checking
+205,Epsilon PLC,250000,2025-03-14,Corporate
+206,Foxtrot Ventures,40000,2025-03-15,Savings
