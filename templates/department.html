@@ -33,10 +33,6 @@
         </div>
     </div>
 </div>
-{% endif %}
-
----
-
 {% if data %}
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -61,26 +57,13 @@
 {% endif %}
 
 ---
-
-<!-- ✅ Traffic Department Section -->
-{% if name.lower() == "traffic" %}
-    <h3>Traffic Department Analysis</h3>
-    
-    <!-- 🔥 Button to toggle the traffic forecast -->
-    <button onclick="toggleForecast()" class="btn btn-primary" style="margin-bottom: 10px;">
-        Toggle Traffic Forecast
-    </button>
-    
-    <!-- 🔥 Container for the forecast image -->
-    <div id="forecastContainer" style="display: none;">
-        <img src="{{ url_for('static', filename='traffic_forecast.png') }}" 
-             alt="Traffic Forecast" 
-             class="img-fluid"
-             style="max-width: 100%; height: auto; border: 1px solid #ccc; box-shadow: 2px 2px 8px #aaa;"/>
-    </div>
 {% endif %}
 
 ---
+
+
+
+
 
 <!-- ✅ Purchases Department Analysis -->
 {% if name.lower() == "purchases" %}
@@ -123,9 +106,164 @@
 {% endif %}
 
 ---
+<!-- ✅ Accounts Department Section -->
+{% if name.lower() == "accounts" %}
+{% if data %}
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            {% for row in data %}
+            <tr>
+                {% for col in columns %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No data available for {{ name }} department.</p>
+{% endif %}
+
+---
+    <h3>Accounts Data Analysis</h3>
+
+    <button onclick="toggleImageSection(this)" data-target="revenue" class="btn btn-primary">Revenue Trends</button>
+    <button onclick="toggleImageSection(this)" data-target="expense" class="btn btn-danger">Expense Trends</button>
+    <button onclick="toggleImageSection(this)" data-target="profitability" class="btn btn-success">Profitability Trends</button>
+    <button onclick="toggleImageSection(this)" data-target="account_forecast" class="btn btn-warning">Account Forecast</button>
+
+    <div id="revenue" class="image-container" style="display: none;">
+        <h4>Revenue Trends</h4>
+        <img src="{{ url_for('static', filename='revenue_trend.png') }}" 
+             alt="Revenue Trends" 
+             class="img-fluid">
+    </div>
+
+    <div id="expense" class="image-container" style="display: none;">
+        <h4>Expense Trends</h4>
+        <img src="{{ url_for('static', filename='expense_trend.png') }}" 
+             alt="Expense Trends" 
+             class="img-fluid">
+    </div>
+
+    <div id="profitability" class="image-container" style="display: none;">
+        <h4>Profitability Trends</h4>
+        <img src="{{ url_for('static', filename='profitability_chart.png') }}" 
+             alt="Profitability Trends" 
+             class="img-fluid">
+    </div>
+
+    <div id="account_forecast" class="image-container" style="display: none;">
+        <h4>Future Account Forecast</h4>
+        <img src="{{ url_for('static', filename='revenue_forecast.png') }}" 
+             alt="Account Forecast" 
+             class="img-fluid">
+    </div>
+{% endif %}
+
+---
+<!-- ✅ Traffic Department Section -->
+{% if name.lower() == "traffic" %}
+    <h3>Traffic Department Data</h3>
+
+    <!-- 🛑 X-scroll wrapper -->
+    <div style="overflow-x: auto; max-width: 100%; border: 1px solid #ddd; padding: 10px;">
+        <table class="table table-striped table-bordered" id="traffic-table">
+            <thead class="thead-dark">
+                <tr>
+                    {% for col in columns %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr class="traffic-row {% if loop.index > 30 %}hidden{% endif %}">
+                        {% for col in columns %}
+                            <td>{{ row[col] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 🔥 View More / View Less button -->
+    <div style="text-align: center; margin-top: 10px;">
+        <button onclick="toggleRows()" id="toggle-btn" class="btn btn-primary">View More</button>
+    </div>
+    <h3>Traffic Data Analysis</h3>
+
+    <button onclick="toggleImageSection(this)" data-target="traffic_density" class="btn btn-primary">Traffic Density</button>
+    <button onclick="toggleImageSection(this)" data-target="bus_demand" class="btn btn-success">Bus Demand vs Supply</button>
+    <button onclick="toggleImageSection(this)" data-target="delay" class="btn btn-warning">Delay Prediction</button>
+    <button onclick="toggleImageSection(this)" data-target="bus_type_demand" class="btn btn-info">Bus Type Demand</button>
+    <button onclick="toggleImageSection(this)" data-target="traffic_forecast" class="btn btn-danger">Traffic Forecast</button>
+
+    <div id="traffic_density" class="image-container" style="display: none;">
+        <h4>Traffic Density</h4>
+        <img src="{{ url_for('static', filename='traffic_density_.png') }}" alt="Traffic Density" class="img-fluid">
+    </div>
+
+    <div id="bus_demand" class="image-container" style="display: none;">
+        <h4>Bus Demand vs Supply</h4>
+        <img src="{{ url_for('static', filename='bus_demand_vs_supply.png') }}" alt="Bus Demand" class="img-fluid">
+    </div>
+
+    <div id="delay" class="image-container" style="display: none;">
+        <h4>Delay Prediction</h4>
+        <img src="{{ url_for('static', filename='delay_prediction_chart.png') }}" alt="Delay Prediction" class="img-fluid">
+    </div>
+
+    <div id="bus_type_demand" class="image-container" style="display: none;">
+        <h4>Bus Type Demand</h4>
+        <img src="{{ url_for('static', filename='bus_type_demand.png') }}" alt="Bus Type Demand" class="img-fluid">
+    </div>
+
+    <div id="traffic_forecast" class="image-container" style="display: none;">
+        <h4>Traffic Forecast</h4>
+        <img src="{{ url_for('static', filename='traffic_forecast.png') }}" alt="Traffic Forecast" class="img-fluid">
+    </div>
+{% endif %}
+
 
 <!-- 🔥 JavaScript Section -->
 <script>
+
+function toggleImageSection(button) {
+    const targetId = button.getAttribute('data-target');
+    const targetSection = document.getElementById(targetId);
+
+    if (targetSection) {
+        const allSections = document.querySelectorAll('.image-container');
+        allSections.forEach(section => section.style.display = 'none');
+        
+        targetSection.style.display = 'block';
+    }
+}
+    function toggleRows() {
+        const rows = document.querySelectorAll('.traffic-row');
+        const btn = document.getElementById('toggle-btn');
+        
+        let isExpanded = btn.textContent === "View Less";
+
+        rows.forEach((row, index) => {
+            if (index >= 30) {  // Ensure we are only toggling rows after the first 30
+                row.style.display = isExpanded ? 'none' : 'table-row';
+            }
+        });
+
+        // Toggle button text
+        btn.textContent = isExpanded ? "View More" : "View Less";
+    }
+   
     const tableBody = document.getElementById("table-body");
     let originalRows = [];
 
@@ -238,7 +376,11 @@ function toggleForecast() {
 }
 
 </script>
-
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 <!-- 🔙 Back to Dashboard -->
 <div class="text-center mt-4">
     <a href="/" class="btn btn-secondary">Back to Dashboard</a>
