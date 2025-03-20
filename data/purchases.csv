@@ -1,11 +1,60 @@
-date,supplier,product,quantity,price,delivery_time,reliability
-2025-01-01,Supplier A,Product 1,100,50,3,1
-2025-01-02,Supplier B,Product 2,150,40,5,0
-2025-01-03,Supplier C,Product 3,200,30,2,1
-2025-01-04,Supplier A,Product 1,120,55,4,1
-2025-01-05,Supplier B,Product 2,180,42,6,0
-2025-01-06,Supplier C,Product 3,130,35,3,1
-2025-01-07,Supplier D,Product 4,90,60,7,0
-2025-01-08,Supplier A,Product 1,110,52,3,1
-2025-01-09,Supplier B,Product 2,170,38,5,0
-2025-01-10,Supplier C,Product 3,160,32,4,1
+date,supplier,product,category,quantity,price,delivery_time,reliability
+2025-01-01,Indian Oil Corporation,Diesel,Fuel,5000 Liters,95,2,1
+2025-01-02,Castrol India Ltd,Engine Oil,Lubricants,300 Liters,450,4,1
+2025-01-03,JK Tyres Ltd,Bus Tires,Spare Parts,150 Units,5000,7,0
+2025-01-04,Godrej Interio,Office Chairs,Office Supplies,50 Units,1200,3,1
+2025-01-05,Bosch India,Brake Pads,Spare Parts,200 Units,350,5,1
+2025-01-06,Exide Industries,Batteries,Electrical Parts,80 Units,1800,6,0
+2025-01-07,HPCL,Diesel,Fuel,4800 Liters,92,3,1
+2025-01-08,Shell Lubricants,Transmission Oil,Lubricants,200 Liters,410,4,1
+2025-01-09,Philips Lighting,LED Bus Lights,Electrical Parts,120 Units,900,5,0
+2025-01-10,JK Paper Ltd,Photocopier Paper,Office Supplies,100 Packs,250,2,1
+2025-01-11,Valvoline India,Engine Coolant,Lubricants,400 Liters,370,3,1
+2025-01-12,Autogreen Industries,Seat Covers,Bus Accessories,200 Units,1400,4,0
+2025-01-13,Lucas TVS,Fuel Pump,Spare Parts,60 Units,7200,7,1
+2025-01-14,Epson India,Printing Ink,Office Supplies,30 Cartridges,1500,3,1
+2025-01-15,Amaron Batteries,Bus Batteries,Electrical Parts,100 Units,5000,6,0
+2025-01-16,Mahindra CIE,Air Filters,Spare Parts,300 Units,400,4,1
+2025-01-17,Petronas Lubricants,Engine Oil,Lubricants,450 Liters,470,3,1
+2025-01-18,CEAT Tyres,Bus Mirrors,Accessories,100 Units,600,5,0
+2025-01-19,Bharat Petroleum,Diesel,Fuel,5200 Liters,97,2,1
+2025-01-20,Medikart Healthcare,First Aid Kits,Bus Safety,150 Units,320,3,1
+2025-01-21,Continental Tyres,Bus Tyres,Spare Parts,80 Units,5600,5,1
+2025-01-22,Tata Steel,Chassis Frames,Structural,40 Units,15000,7,1
+2025-01-23,L&T India,Gear Systems,Spare Parts,120 Units,8900,4,0
+2025-01-24,Wipro Lighting,Bus LED Panels,Electrical Parts,60 Units,3000,3,1
+2025-01-25,3M India,Reflective Tape,Accessories,200 Units,500,2,1
+2025-01-26,Michelin Tyres,Heavy-duty Tyres,Spare Parts,100 Units,6700,6,1
+2025-01-27,Godrej Interio,Office Desks,Office Supplies,30 Units,8000,4,1
+2025-01-28,HP India,Printers,Office Equipment,20 Units,15000,5,1
+2025-01-29,Asian Paints,Bus Exterior Paint,Paint & Coating,300 Liters,1500,4,1
+2025-01-30,Stanley Tools,Tool Kits,Workshop Tools,50 Kits,4500,3,1
+2025-01-31,Safex Fire Services,Fire Extinguishers,Safety Equipment,120 Units,700,2,1
+2025-02-01,Voltas Ltd,Bus Air Conditioners,HVAC,40 Units,30000,6,0
+2025-02-02,Greaves Cotton,Diesel Generators,Power Equipment,15 Units,120000,7,1
+2025-02-03,Kirloskar Electric,Alternators,Electrical Parts,25 Units,32000,5,1
+2025-02-04,Blue Star India,Refrigeration Units,HVAC,10 Units,85000,4,1
+2025-02-05,Hitachi India,Bus Air Conditioners,HVAC,35 Units,31000,6,0
+2025-02-06,Panasonic,Bus CCTV Cameras,Security,150 Units,9000,3,1
+2025-02-07,Thermax,Water Treatment Systems,Infrastructure,5 Units,150000,7,1
+2025-02-08,Kone India,Hydraulic Lifts,Maintenance,3 Units,250000,8,1
+2025-02-09,Titan Paints,Bus Interior Paint,Paint & Coating,200 Liters,1300,4,1
+2025-02-10,Havells India,Electrical Wires,Electrical Parts,500 Meters,250,3,1
+2025-02-11,Schneider Electric,Surge Protectors,Electrical Parts,60 Units,4000,5,0
+2025-02-12,Cummins India,Bus Engines,Spare Parts,10 Units,500000,10,1
+2025-02-13,SKF India,Ball Bearings,Spare Parts,400 Units,120,2,1
+2025-02-14,Finolex Cables,Optic Fiber Cables,Communication,1000 Meters,200,5,1
+2025-02-15,Bharat Seats,Driver Seats,Bus Accessories,60 Units,4500,4,1
+2025-02-16,ABB India,Voltage Stabilizers,Electrical Equipment,35 Units,18000,6,1
+2025-02-17,Osram India,Headlights,Electrical Parts,250 Units,800,3,1
+2025-02-18,Siemens Ltd,Control Panels,Electrical Parts,15 Units,65000,7,1
+2025-02-19,Adani Power,Power Supply,Infrastructure,8 Units,140000,9,1
+2025-02-20,KEC International,Electric Poles,Infrastructure,100 Units,11000,5,1
+2025-02-21,L&T Valves,Pneumatic Valves,Spare Parts,300 Units,2300,4,0
+2025-02-22,TATA Motors,Bus Engines,Spare Parts,15 Units,490000,10,1
+2025-02-23,Bosch India,Disc Brakes,Spare Parts,200 Units,3700,6,1
+2025-02-24,Kirloskar,Water Pumps,Spare Parts,80 Units,14000,4,1
+2025-02-25,CEAT Tyres,All-terrain Tyres,Spare Parts,120 Units,6200,7,0
+2025-02-26,Volvo India,Bus Mirrors,Accessories,70 Units,900,3,1
+2025-02-27,Eicher Motors,Bus Engines,Spare Parts,18 Units,520000,8,1
+2025-02-28,Blue Dart,Logistics Services,Services,50 Shipments,1500,2,1

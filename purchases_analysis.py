@@ -5,19 +5,24 @@ from prophet import Prophet
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
+
 import os
 
-# ✅ Ensure output directory exists
+# ✅ Ensure the static output directory exists
 if not os.path.exists('static'):
     os.makedirs('static')
 
 # 📊 **1. Load and Preprocess Data**
 def load_purchases_data(csv_file='data/purchases.csv'):
+    """Load and preprocess the purchases data from a CSV file."""
     df = pd.read_csv(csv_file)
     
     # Convert dates to datetime format
-    df['date'] = pd.to_datetime(df['date'])
-    
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+    # ✅ Print columns for debugging
+    print("Columns in CSV:", df.columns)
+
     # Sort by date
     df.sort_values('date', inplace=True)
     
@@ -25,15 +30,28 @@ def load_purchases_data(csv_file='data/purchases.csv'):
 
 # 📈 **2. Bar Chart: Top-performing Suppliers**
 def generate_top_suppliers_chart(df):
-    top_suppliers = df.groupby('supplier')['quantity'].sum().reset_index()
-    top_suppliers = top_suppliers.sort_values('quantity', ascending=False)
+    """Generate a bar chart showing top-performing suppliers by purchase quantity."""
+    
+    # ✅ Handle missing or differently named columns
+    quantity_col = 'quantity' if 'quantity' in df.columns else df.select_dtypes(include='number').columns[0]
 
-    plt.figure(figsize=(12, 6))
-    sns.barplot(x='quantity', y='supplier', data=top_suppliers, palette='viridis')
+    # ✅ Clean non-numeric values
+    df[quantity_col] = df[quantity_col].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+
+    top_suppliers = df.groupby('supplier')[quantity_col].sum().reset_index()
+    top_suppliers = top_suppliers.sort_values(quantity_col, ascending=False)
+
+    plt.figure(figsize=(14, 10))
+    sns.barplot(x=quantity_col, y='supplier', data=top_suppliers, palette='viridis')
     plt.title('Top-Performing Suppliers by Purchase Quantity')
-    plt.xlabel('Total Quantity Purchased')
-    plt.ylabel('Supplier')
-
+    plt.xlabel('Total Quantity Purchased',fontsize=14)
+    plt.ylabel('Supplier',fontsize=14)
+    
+ # ✅ Adjust label size and add padding
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+        # ✅ Add more space on the left if labels are too long
+    plt.subplots_adjust(left=0.3)  # Increase left margin
     chart_path = 'static/top_suppliers.png'
     plt.savefig(chart_path)
     plt.close()
@@ -41,34 +59,65 @@ def generate_top_suppliers_chart(df):
     return chart_path
 
 # 🔮 **3. Time Series Forecasting for Future Purchase Trends**
-def generate_purchase_forecast(df, periods=30):
-    forecast_df = df[['date', 'quantity']].rename(columns={'date': 'ds', 'quantity': 'y'})
+def generate_purchase_forecast(purchases_df):
+    """Generate a future forecast chart for purchases using Prophet."""
 
+    # ✅ Handle missing or differently named amount/price columns
+    if 'amount' in purchases_df.columns:
+        amount_col = 'amount'
+    elif 'price' in purchases_df.columns:
+        amount_col = 'price'
+    elif 'value' in purchases_df.columns:
+        amount_col = 'value'
+    else:
+        # Fallback to the first numeric column
+        amount_col = purchases_df.select_dtypes(include='number').columns[0]
+
+    print(f"Using column '{amount_col}' for forecasting.")
+
+    # Prepare the dataframe for Prophet
+    forecast_df = purchases_df[['date', amount_col]].rename(columns={'date': 'ds', amount_col: 'y'})
+
+    # ✅ Clean non-numeric values
+    forecast_df['y'] = forecast_df['y'].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+
+    # Fit the model
     model = Prophet()
     model.fit(forecast_df)
 
-    future = model.make_future_dataframe(periods=periods)
+    # Make future predictions
+    future = model.make_future_dataframe(periods=30)  # Forecast for 30 days
     forecast = model.predict(future)
 
-    plt.figure(figsize=(12, 6))
-    plt.plot(forecast['ds'], forecast['yhat'], label='Forecast', color='orange')
-    plt.fill_between(forecast['ds'], forecast['yhat_lower'], forecast['yhat_upper'], color='gray', alpha=0.3, label='Confidence Interval')
-    plt.scatter(forecast_df['ds'], forecast_df['y'], label='Actual Data', color='blue')
-    plt.title('Purchase Forecast for Next 30 Days')
-    plt.xlabel('Date')
-    plt.ylabel('Purchase Quantity')
-    plt.legend()
 
-    forecast_path = 'static/purchase_forecast.png'
-    plt.savefig(forecast_path)
-    plt.close()
+    # Save the forecast chart
+    fig = model.plot(forecast)
+    # ✅ Change the X and Y-axis labels
+    ax = fig.gca()  # Get current axes
+    ax.set_xlabel('Date', fontsize=12)   # Replace 'ds' with 'Date'
+    ax.set_ylabel('Purchase Amount', fontsize=12)  # Replace 'y' with 'Purchase Amount'
 
-    return forecast_path
+    fig.savefig('static/purchase_forecast.png')
+
+    return 'static/purchase_forecast.png'
 
 # 💰 **4. Price Optimization Using Linear Regression**
 def generate_price_optimization_chart(df):
-    X = df[['quantity']]
-    y = df['price']
+    """Generate a chart for price optimization using linear regression."""
+    
+    # ✅ Handle flexible column names
+    quantity_col = 'quantity' if 'quantity' in df.columns else df.select_dtypes(include='number').columns[0]
+    price_col = 'price' if 'price' in df.columns else df.select_dtypes(include='number').columns[1]
+
+    # ✅ Clean non-numeric values
+    df[quantity_col] = df[quantity_col].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+    df[price_col] = df[price_col].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+
+    # ✅ Ensure no NaN or infinite values
+    df = df.dropna(subset=[quantity_col, price_col])
+
+    X = df[[quantity_col]]
+    y = df[price_col]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -94,8 +143,21 @@ def generate_price_optimization_chart(df):
 
 # ✅ **5. Supplier Reliability Classification**
 def generate_reliability_chart(df):
-    X = df[['delivery_time']]
-    y = df['reliability']
+    """Generate a chart for supplier reliability classification using Random Forest."""
+
+    # ✅ Handle dynamic column names
+    delivery_col = 'delivery_time' if 'delivery_time' in df.columns else df.select_dtypes(include='number').columns[0]
+    reliability_col = 'reliability' if 'reliability' in df.columns else df.select_dtypes(include='number').columns[1]
+
+    # ✅ Clean non-numeric values
+    df[delivery_col] = df[delivery_col].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+    df[reliability_col] = df[reliability_col].astype(str).str.replace(r'[^0-9.]', '', regex=True).astype(float)
+
+    # ✅ Ensure no NaN values
+    df = df.dropna(subset=[delivery_col, reliability_col])
+
+    X = df[[delivery_col]]
+    y = df[reliability_col]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -105,8 +167,8 @@ def generate_reliability_chart(df):
     predictions = model.predict(X_test)
 
     plt.figure(figsize=(12, 6))
-    sns.scatterplot(x=X_test['delivery_time'], y=predictions, label='Predicted Reliability', color='orange')
-    sns.scatterplot(x=X_test['delivery_time'], y=y_test, label='Actual Reliability', color='blue')
+    sns.scatterplot(x=X_test[delivery_col], y=predictions, label='Predicted Reliability', color='orange')
+    sns.scatterplot(x=X_test[delivery_col], y=y_test, label='Actual Reliability', color='blue')
     plt.title('Supplier Reliability Prediction')
     plt.xlabel('Delivery Time (Days)')
     plt.ylabel('Reliability (1 = Reliable, 0 = Unreliable)')

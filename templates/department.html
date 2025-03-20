@@ -3,6 +3,40 @@
 {% block content %}
 <h2>{{ name.capitalize() }} Department</h2>
 
+<!-- ✅ Filter Section Above the Table (for Purchases) -->
+{% if name.lower() == "purchases" %}
+<div class="card mb-4 p-3">
+    <h4>Filter Purchases</h4>
+    
+    <div class="row g-3">
+        <!-- 🔥 Date Filter -->
+        <div class="col-md-4">
+            <label for="date-filter" class="form-label">Filter by Date (Last N Months)</label>
+            <input type="number" id="date-filter" class="form-control" min="1" placeholder="Enter months" />
+        </div>
+
+        <!-- 🔥 Price Filter -->
+        <div class="col-md-4">
+            <label for="min-price" class="form-label">Min Price</label>
+            <input type="number" id="min-price" class="form-control" placeholder="Min Price" />
+
+            <label for="max-price" class="form-label mt-2">Max Price</label>
+            <input type="number" id="max-price" class="form-control" placeholder="Max Price" />
+        </div>
+
+        <!-- 🔥 Filter and Reset Buttons -->
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="btn-group">
+                <button onclick="applyFilters()" class="btn btn-primary">Apply Filters</button>
+                <button onclick="resetTable()" class="btn btn-warning">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+---
+
 {% if data %}
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -12,7 +46,7 @@
                 {% endfor %}
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
             {% for row in data %}
             <tr>
                 {% for col in columns %}
@@ -28,91 +62,182 @@
 
 ---
 
-<!-- ✅ Traffic Prediction Section -->
+<!-- ✅ Traffic Department Section -->
 {% if name.lower() == "traffic" %}
-    <h3>Traffic Department</h3>
-
-    <!-- Button to toggle image -->
-    <button onclick="toggleForecast()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin: 10px 0;">
-        Show Traffic Forecast
+    <h3>Traffic Department Analysis</h3>
+    
+    <!-- 🔥 Button to toggle the traffic forecast -->
+    <button onclick="toggleForecast()" class="btn btn-primary" style="margin-bottom: 10px;">
+        Toggle Traffic Forecast
     </button>
-
-    <!-- Image hidden by default -->
-    <div id="forecastContainer" style="display: none; margin-top: 20px;">
-        <img src="{{ url_for('static', filename='traffic_forecast.png') }}" alt="Traffic Forecast" 
-             style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    
+    <!-- 🔥 Container for the forecast image -->
+    <div id="forecastContainer" style="display: none;">
+        <img src="{{ url_for('static', filename='traffic_forecast.png') }}" 
+             alt="Traffic Forecast" 
+             class="img-fluid"
+             style="max-width: 100%; height: auto; border: 1px solid #ccc; box-shadow: 2px 2px 8px #aaa;"/>
     </div>
 {% endif %}
 
 ---
 
-<!-- ✅ Purchases Section -->
+<!-- ✅ Purchases Department Analysis -->
 {% if name.lower() == "purchases" %}
     <h3>Purchases Data Analysis</h3>
 
-    <!-- 🎯 Toggle Buttons -->
-    <div class="btn-group" role="group" aria-label="Purchases Analysis" style="margin-bottom: 20px;">
-        <button onclick="toggleVisibility('suppliers')" class="btn btn-primary">Top Suppliers</button>
-        <button onclick="toggleVisibility('forecast')" class="btn btn-success">Future Forecast</button>
-        <button onclick="toggleVisibility('price')" class="btn btn-warning">Price Optimization</button>
-        <button onclick="toggleVisibility('reliability')" class="btn btn-info">Supplier Reliability</button>
-    </div>
+    <button onclick="toggleImageSection(this)" data-target="suppliers" class="btn btn-primary">Top Suppliers</button>
+    <button onclick="toggleImageSection(this)" data-target="forecast" class="btn btn-success">Future Forecast</button>
+    <button onclick="toggleImageSection(this)" data-target="price" class="btn btn-warning">Price Optimization</button>
+    <button onclick="toggleImageSection(this)" data-target="reliability" class="btn btn-info">Supplier Reliability</button>
 
-    <!-- 📊 Top Suppliers -->
-    <div id="suppliers" class="image-container" style="display: none; margin-top: 20px;">
+    
+
+    <div id="suppliers" class="image-container" style="display: none;">
         <h4>Top-Performing Suppliers</h4>
-        <img src="{{ url_for('static', filename='top_suppliers.png') }}" alt="Top Suppliers" class="img-fluid">
+        <img src="{{ url_for('static', filename='top_suppliers.png') }}" 
+             alt="Top Suppliers" 
+             class="img-fluid">
     </div>
 
-    <!-- 📈 Future Purchase Forecast -->
-    <div id="forecast" class="image-container" style="display: none; margin-top: 20px;">
+    <div id="forecast" class="image-container" style="display: none;">
         <h4>Future Purchase Forecast</h4>
-        <img src="{{ url_for('static', filename='purchase_forecast.png') }}" alt="Demand Forecast" class="img-fluid">
+        <img src="{{ url_for('static', filename='purchase_forecast.png') }}" 
+             alt="Forecast" 
+             class="img-fluid">
     </div>
 
-    <!-- 💰 Price Optimization -->
-    <div id="price" class="image-container" style="display: none; margin-top: 20px;">
+    <div id="price" class="image-container" style="display: none;">
         <h4>Price Optimization</h4>
-        <img src="{{ url_for('static', filename='price_optimization.png') }}" alt="Price Optimization" class="img-fluid">
+        <img src="{{ url_for('static', filename='price_optimization.png') }}" 
+             alt="Price Optimization" 
+             class="img-fluid">
     </div>
 
-    <!-- 🔍 Supplier Reliability -->
-    <div id="reliability" class="image-container" style="display: none; margin-top: 20px;">
+    <div id="reliability" class="image-container" style="display: none;">
         <h4>Supplier Reliability</h4>
-        <img src="{{ url_for('static', filename='reliability_chart.png') }}" alt="Supplier Performance" class="img-fluid">
+        <img src="{{ url_for('static', filename='reliability_chart.png') }}" 
+             alt="Reliability" 
+             class="img-fluid">
     </div>
 {% endif %}
 
 ---
 
-<!-- 🔥 JavaScript for Toggling -->
+<!-- 🔥 JavaScript Section -->
 <script>
-    // Function to toggle traffic forecast
-    function toggleForecast() {
-        const container = document.getElementById('forecastContainer');
-        container.style.display = (container.style.display === "none" || container.style.display === "") ? "block" : "none";
+    const tableBody = document.getElementById("table-body");
+    let originalRows = [];
+
+    // ✅ Store original rows only once when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        if (tableBody) {
+            originalRows = Array.from(tableBody.rows).map(row => row.cloneNode(true));
+        }
+    });
+
+    // ✅ Get Column Index Dynamically
+    function getColumnIndex(name) {
+        const headers = document.querySelectorAll("thead th");
+        for (let i = 0; i < headers.length; i++) {
+            if (headers[i].innerText.trim().toLowerCase() === name.toLowerCase()) {
+                return i;
+            }
+        }
+        return -1;
     }
 
-    // Function to toggle Purchases Analysis images
-    function toggleVisibility(id) {
-        const containers = document.querySelectorAll('.image-container');
+    const dateIndex = getColumnIndex("date");
+    const priceIndex = getColumnIndex("price");
 
-        // Hide all containers
-        containers.forEach(container => {
-            if (container.id !== id) {
-                container.style.display = "none";
+    // ✅ Apply Filters
+    function applyFilters() {
+        resetTable();
+        
+        const months = parseInt(document.getElementById('date-filter').value);
+        const minPrice = parseFloat(document.getElementById('min-price').value);
+        const maxPrice = parseFloat(document.getElementById('max-price').value);
+
+        if (!isNaN(months) && months > 0) {
+            filterByDate(months);
+        }
+        if (!isNaN(minPrice) && !isNaN(maxPrice) && minPrice <= maxPrice) {
+            filterByPrice(minPrice, maxPrice);
+        }
+    }
+
+    // ✅ Reset the table to its original state
+    function resetTable() {
+        if (!tableBody) return;
+        tableBody.innerHTML = "";
+        originalRows.forEach(row => tableBody.appendChild(row.cloneNode(true)));
+    }
+
+    // ✅ Filter by Date
+    function filterByDate(months) {
+        if (!tableBody || dateIndex === -1) return;
+
+        const currentDate = new Date();
+
+        Array.from(tableBody.rows).forEach(row => {
+            const dateText = row.cells[dateIndex]?.innerText.trim();
+            if (dateText) {
+                const rowDate = new Date(dateText);
+                if (!isNaN(rowDate)) {
+                    const diffMonths = (currentDate.getFullYear() - rowDate.getFullYear()) * 12 +
+                        (currentDate.getMonth() - rowDate.getMonth());
+                    row.style.display = (diffMonths <= months) ? "" : "none";
+                }
             }
         });
-
-        // Toggle the selected container
-        const selectedContainer = document.getElementById(id);
-        selectedContainer.style.display = (selectedContainer.style.display === "none" || selectedContainer.style.display === "") 
-                                            ? "block" 
-                                            : "none";
     }
-</script>
 
----
+    // ✅ Filter by Price
+    function filterByPrice(min, max) {
+        if (!tableBody || priceIndex === -1) return;
+
+        Array.from(tableBody.rows).forEach(row => {
+            const priceText = row.cells[priceIndex]?.innerText.trim();
+            if (priceText) {
+                const price = parseFloat(priceText.replace(/[^0-9.-]+/g, ''));
+                if (!isNaN(price)) {
+                    row.style.display = (price >= min && price <= max) ? "" : "none";
+                }
+            }
+        });
+    }
+        // ✅ Toggle Analysis Sections
+        // ✅ Function to toggle image sections dynamically
+function toggleImageSection(button) {
+    const targetId = button.getAttribute('data-target');
+    const targetSection = document.getElementById(targetId);
+
+    if (targetSection) {
+        // Hide all image sections first
+        const allSections = document.querySelectorAll('.image-container');
+        allSections.forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Toggle the clicked section
+        targetSection.style.display = (targetSection.style.display === 'none' || targetSection.style.display === '') 
+                                      ? 'block' 
+                                      : 'none';
+    }
+}
+
+// ✅ Function to toggle the Traffic Forecast image
+function toggleForecast() {
+    const forecastContainer = document.getElementById('forecastContainer');
+
+    if (forecastContainer) {
+        forecastContainer.style.display = (forecastContainer.style.display === 'none' || forecastContainer.style.display === '') 
+                                          ? 'block' 
+                                          : 'none';
+    }
+}
+
+</script>
 
 <!-- 🔙 Back to Dashboard -->
 <div class="text-center mt-4">
